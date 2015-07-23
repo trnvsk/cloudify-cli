@@ -728,16 +728,7 @@ def _validate_package_url_accessible(package_url):
     ctx.logger.debug('OK: url {0} is accessible'.format(package_url))
 
 
-# temp workaround to enable teardown and recovery from different machines
+# changed to noop since the _workdir() function used in dump_manager_deployment
+# seems to be broken for non-local deployments
 def _dump_manager_deployment():
-    from cloudify_cli.bootstrap.bootstrap import dump_manager_deployment
-    from cloudify_cli.bootstrap.bootstrap import load_env
-
-    # explicitly write the manager node instance id to local storage
-    env = load_env('manager')
-    with env.storage.payload() as payload:
-        payload['manager_node_instance_id'] = ctx.instance.id
-
-    # explicitly flush runtime properties to local storage
-    ctx.instance.update()
-    return dump_manager_deployment()
+    return 'manager_deployment'
